@@ -1,0 +1,74 @@
+---
+# Shamelessly stolen from https://github.com/vitalk/ansible-secure-ssh for learning purposes
+- name: Secure SSH
+  hosts: 192.168.1.88
+  become: true 
+  vars:
+    sshd: ssh
+    sshd_config: /etc/ssh/sshd_config
+  handlers:
+    - name: restart sshd
+      service: name={{ sshd }} state=restarted
+
+
+
+  tasks: 
+
+
+    - name: add ansible service account
+      user:
+        name: ansible-srv-usr
+        shell: /bin/bash
+        groups: sudo
+        append: yes
+  
+    - name: Add identity key to authorized keys on host
+      authorized_key: 
+        user: ansible-srv-usr
+        key: "{{ lookup('file', /home/ansible-admin/.ssh/id_rsa.pub) }}"
+      register: add_identity_key
+      when: ssh_identity_key is defined and ssh_user is defined
+
+    - name: Disable empty password login
+      lineinfile: 
+        dest: "{{ sshd_config }}" 
+        regexp: '^#?PermitEmptyPasswords' 
+        line: 'PermitEmptyPasswords no'
+      notify: restart sshd
+
+    - name: Disable remote root login
+      lineinfile: 
+        dest: "{{ sshd_config }}" 
+        regexp: '^#?PermitRootLogin' 
+        line: 'PermitRootLogin no'
+      notify: restart sshd
+
+    - name: Enable Public Key Auth
+      lineinfile: 
+        dest: "{{ sshd_config }}" 
+        regexp: '^#?PubkeyAuthentication' 
+        line: 'PubkeyAuthentication yes'
+      notify: restart sshd
+
+    - name: Disable password login
+      lineinfile: 
+        dest: "{{ sshd_config }}" 
+        regexp: '^(#\s*)?PasswordAuthentication '
+        line: 'PasswordAuthentication no'
+      when: 
+        - add_identity_key is succeeded 
+        - not add_identity_key is skipped
+      notify: restart sshd
+
+    - name: Enable PAM
+      lineinfile: 
+        dest: "{{ sshd_config }}" 
+        regexp: '^#?UsePAM' 
+        line: 'UsePAM yes'
+      notify: restart sshd
+    
+    - name: Remove Default Ubuntu user
+      user:
+        name: ubuntu
+        state: abset
+        remove: yes

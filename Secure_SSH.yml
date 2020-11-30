@@ -31,6 +31,13 @@
         line: 'PermitRootLogin no'
       notify: restart sshd
 
+    - name: Enable Public Key Auth
+      lineinfile: 
+        dest: "{{ sshd_config }}" 
+        regexp: '^#?PubkeyAuthentication' 
+        line: 'PubkeyAuthentication yes'
+      notify: restart sshd
+
     - name: Disable password login
       lineinfile: 
         dest: "{{ sshd_config }}" 

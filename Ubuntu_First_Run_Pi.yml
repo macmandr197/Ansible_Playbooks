@@ -66,9 +66,3 @@
         regexp: '^#?UsePAM' 
         line: 'UsePAM yes'
       notify: restart sshd
-    
-    - name: Remove Default Ubuntu user
-      user:
-        name: ubuntu
-        state: absent
-        remove: yes

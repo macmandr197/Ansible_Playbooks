@@ -6,6 +6,8 @@
   vars:
     sshd: ssh
     sshd_config: /etc/ssh/sshd_config
+    ssh_identity_key: /home/ansible-admin/.ssh/id_rsa.pub)
+    ssh_user: ansible-srv-usr
   handlers:
     - name: restart sshd
       service: name={{ sshd }} state=restarted
@@ -13,8 +15,6 @@
 
 
   tasks: 
-
-
     - name: add ansible service account
       user:
         name: ansible-srv-usr
@@ -24,8 +24,8 @@
   
     - name: Add identity key to authorized keys on host
       authorized_key: 
-        user: ansible-srv-usr
-        key: "{{ lookup('file', /home/ansible-admin/.ssh/id_rsa.pub) }}"
+        user: "{{ ssh_user }}"
+        key: "{{ lookup('file', ssh_identity_key }}"
       register: add_identity_key
       when: ssh_identity_key is defined and ssh_user is defined
 
@@ -70,5 +70,5 @@
     - name: Remove Default Ubuntu user
       user:
         name: ubuntu
-        state: abset
+        state: absent
         remove: yes

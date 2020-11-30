@@ -6,14 +6,16 @@
   vars:
     sshd: ssh
     sshd_config: /etc/ssh/sshd_config
+    sshd_config: /etc/ssh/sshd_config
+    ssh_identity_key: /home/ansible-admin/.ssh/id_rsa.pub)
   handlers:
     - name: restart sshd
       service: name={{ sshd }} state=restarted
   tasks:   
     - name: Add identity key to authorized keys on host
       authorized_key: 
-        user: ansible-srv-usr
-        key: "{{ lookup('file', /home/ansible-admin/.ssh/id_rsa.pub) }}"
+        user: "{{ ssh_user }}"
+        key: "{{ lookup('file', ssh_identity_key }}"
       register: add_identity_key
       when: ssh_identity_key is defined and ssh_user is defined
 

@@ -2,7 +2,8 @@
 - name: Secure SSH
   hosts: picluster
   become: true 
-  sshd_config: /etc/ssh/sshd_config
+  vars:
+    sshd_config: /etc/ssh/sshd_config
   handlers:
     - name: restart sshd
       service: name={{ sshd }} state=restarted

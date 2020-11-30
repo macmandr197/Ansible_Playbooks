@@ -7,7 +7,7 @@
     sshd: ssh
     sshd_config: /etc/ssh/sshd_config
     sshd_config: /etc/ssh/sshd_config
-    ssh_identity_key: /home/ansible-admin/.ssh/id_rsa.pub)
+    ssh_identity_key: /home/ansible-admin/.ssh/id_rsa.pub
   handlers:
     - name: restart sshd
       service: name={{ sshd }} state=restarted

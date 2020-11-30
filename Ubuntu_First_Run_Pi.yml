@@ -6,7 +6,7 @@
   vars:
     sshd: ssh
     sshd_config: /etc/ssh/sshd_config
-    ssh_identity_key: /home/ansible-admin/.ssh/id_rsa.pub)
+    ssh_identity_key: /home/ansible-admin/.ssh/id_rsa.pub
     ssh_user: ansible-srv-usr
   handlers:
     - name: restart sshd

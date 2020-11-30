@@ -1,8 +1,10 @@
 ---
+# Shamelessly stolen from https://github.com/vitalk/ansible-secure-ssh for learning purposes
 - name: Secure SSH
   hosts: picluster
   become: true 
   vars:
+    sshd: ssh
     sshd_config: /etc/ssh/sshd_config
   handlers:
     - name: restart sshd

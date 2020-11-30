@@ -2,6 +2,9 @@
 - name: Secure SSH
   hosts: picluster
   become: true 
+  handlers:
+    - name: restart sshd
+      service: name={{ sshd }} state=restarted
   tasks:   
     - name: Add identity key to authorized keys on host
       authorized_key: 

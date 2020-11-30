@@ -25,16 +25,6 @@
           - python3-setuptools
           - aptitude
 
-    - name: Add Docker GPG apt Key
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
-
-    - name: Add Docker Repository
-      apt_repository:
-        repo: deb [arch=arm64] https://download.docker.com/linux/ubuntu focal stable
-        state: present
-
     - name: Install docker and its dependecies
       apt: 
         name: "{{ packages }}"
@@ -42,9 +32,7 @@
         update_cache: yes
       vars:
         packages: #packages get redefined here
-        - docker-ce 
-        - docker-ce-cli 
-        - containerd.io
+        - docker.io
       notify:
         - docker status
 

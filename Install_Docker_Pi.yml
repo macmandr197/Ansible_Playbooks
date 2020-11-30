@@ -59,7 +59,6 @@
     - name: Enable cgroups limit support
       lineinfile:
         path: /boot/firmware/cmdline.txt
-        backup: yes
         state: present
-        regexp: '^quiet splash$'
-        line: ' cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 swapaccount=1/'        
+        regexp: '^quiet splash'
+        line: 'quiet splash cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 swapaccount=1/'        

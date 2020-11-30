@@ -2,6 +2,7 @@
 - name: Secure SSH
   hosts: picluster
   become: true 
+  sshd_config: /etc/ssh/sshd_config
   handlers:
     - name: restart sshd
       service: name={{ sshd }} state=restarted
@@ -15,7 +16,7 @@
 
     - name: Disable empty password login
       lineinfile: 
-        dest: "/etc/ssh/sshd_config" 
+        dest: "{{ sshd_config }}" 
         regexp: '^#?PermitEmptyPasswords' 
         line: 'PermitEmptyPasswords no'
       notify: restart sshd

@@ -63,16 +63,3 @@
         state: present
         regexp: '^quiet splash$'
         line: ' cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 swapaccount=1/'        
-
-    - name: Remove swapfile from /etc/fstab
-      mount:
-        name: "{{ item }}"
-        fstype: swap
-        state: absent
-      with_items:
-        - swap
-        - none
-
-    - name: Disable swap
-      command: swapoff -a
-      when: ansible_swaptotal_mb > 0

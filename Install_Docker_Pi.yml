@@ -38,17 +38,18 @@
 
     - name: Change default cgroups driver
       shell: |
-          cat > /etc/docker/daemon.json << EOF
-          {
-            "exec-opts": ["native.cgroupdriver=systemd"],
-            "log-driver": "json-file",
-            "log-opts": {
-              "max-size": "100m"
-            },
-            "storage-driver": "overlay2"
-          }
-          EOF
-      creates: /etc/docker/daemon.json
+        cat > /etc/docker/daemon.json << EOF
+        {
+          "exec-opts": ["native.cgroupdriver=systemd"],
+          "log-driver": "json-file",
+          "log-opts": {
+            "max-size": "100m"
+          },
+          "storage-driver": "overlay2"
+        }
+        EOF
+      chdir: /etc/docker
+      creates: daemon.json
 
     - name: Enable cgroups limits support
       command: 

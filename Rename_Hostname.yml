@@ -1,2 +1,11 @@
 ---
-  
+- name: Rename Hostname
+  hosts: 192.168.1.81
+  become: true
+
+  tasks:
+  hostname:
+    - name: Modify Hostname
+      use: debian
+      hostname:
+        name: node-01

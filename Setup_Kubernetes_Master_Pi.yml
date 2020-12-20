@@ -9,7 +9,7 @@
 
   tasks:
 
-    - name: Install prerequisite packages
+    - name: Install prerequisite packages for docker
       apt:
         name: "{{ packages }}"
         state: present
@@ -99,11 +99,6 @@
         - kubeadm
         - kubectl
 
-    - name: Configure node ip
-      lineinfile:
-        path: /etc/default/kubelet
-        line: KUBELET_EXTRA_ARGS=--node-ip=192.168.1.88
-
     - name: Restart kubelet
       service:
         name: kubelet
@@ -111,7 +106,7 @@
         state: restarted
     
     - name: Initialize the Kubernetes cluster using kubeadm
-      command: kubeadm init --apiserver-advertise-address="192.168.1.88" --apiserver-cert-extra-sans="192.168.1.88"  --node-name k8s-master --pod-network-cidr=192.168.1.0/24
+      command: kubeadm init --apiserver-advertise-address="192.168.1.88" --apiserver-cert-extra-sans="192.168.1.88"  --node-name k8s-master --pod-network-cidr=10.244.0.0/24
 
     - name: Install calico pod network
       become: false

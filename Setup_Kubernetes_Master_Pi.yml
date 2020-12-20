@@ -1,6 +1,6 @@
 ---
 - name: Install Docker
-  hosts: 192.168.1.80
+  hosts: 192.168.1.88
   become: true
 
   handlers:
@@ -115,7 +115,7 @@
     - name: Install calico pod network
       become: false
       command: kubectl create -f https://docs.projectcalico.org/v3.4/getting-started/kubernetes/installation/hosted/calico.yaml
-      
+
     - name: Generate join command
       command: kubeadm token create --print-join-command
       register: join_command
